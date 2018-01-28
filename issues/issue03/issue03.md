@@ -1,6 +1,6 @@
 ##【Draft】webpack热更新问题解决及分析（一）
 
-简介：本项目架构以express作为服务端，本地开发搭配webpack-dev-middlerware、wepack-hot-middleware、webpack.HotModuleReplacementPlugin实现热加载刷新。生产打包结果在存在dist目录下，开发热加载替换目录为/examples。
+简介：本项目以express作为服务端，本地开发搭配webpack-dev-middlerware、wepack-hot-middleware、webpack.HotModuleReplacementPlugin实现热加载更新。生产打包结果在存在dist目录下，开发热加载替换目录为/examples。
 
 ### 问题发现
 
@@ -60,7 +60,7 @@ entry: {
 
 webpack-develop.config.js和webpack-build.config.js有啥区别？区别还是有的，但是其他入口的页面（注：本项目可理解为是多入口页面）也是基于这两个配置文件的，本地开发和生产打包后皆是正常。仔细排查会发现如下两个解决问题的入口：
 >1.  webpack-develop.config.js和webpack-build.config.js是有区别的，build配置里头使用ExtractTextPlugin、UglifyJSPlugin，而develop没有使用，develop有热加载插件；
->2.  其它入口的页面都是正常的，唯独examples/test/index.js这种情况有问题，比较后会发现引入的使用方式不同，其他入口文件的是引用了模块文件后自执行代码片段输出dom，而examples/test/index.js作为打包入口最后通过module.exports = Test，然后example/test/index.html是直接通过<script>标签引入后直接去取全局变量里头的Test引用，取引用失败。而事实上我们知道，通过umd打包后，如果页面通过script标签直接引入，入口文件module.exports输出对象实际就是挂在windows上的
+>2.  其它入口的页面都是正常的，唯独examples/test/index.js这种情况有问题，比较后会发现引入的使用方式不同，其他入口文件的是引用了模块文件后自执行代码片段输出dom，而examples/test/index.js作为打包入口最后通过module.exports = Test，然后example/test/index.html是直接通过 script 标签引入后直接去取全局变量里头的Test引用，取引用失败。而事实上我们知道，通过umd打包后，如果页面通过script标签直接引入，入口文件module.exports输出对象实际就是挂在windows上的
 ![03](https://user-images.githubusercontent.com/5029635/35035851-7ebaa44e-fbad-11e7-9d36-4282df8cbd9f.jpg)
 
 在第1个问题入口处排查中取出热加载功能后，就一切正常了。结合以上两点，我们有理由猜测导致上述问题的原因很可能是热加载过程中导致入口文件module.exports输出的对象无法被正确挂载到windows上。而至于真实情况是就是没有挂载还是挂载后被冲掉（复写）了，则需要分析源码才能知道。
