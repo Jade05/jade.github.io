@@ -69,7 +69,11 @@ test_s.js是生产包，摒除了热加载，本身test.js也没啥代码，所�
 
 【图片】
 
-如果你认真看过最前面推荐的文章——[Webpack 热更新实现原理分析](https://zhuanlan.zhihu.com/p/30623057)，并且浏览过HRM源码，就会有深刻印象。这是HRM的client，核心是EventSource，将与HRM server建立连接，进行模块更新通信。看一下代码注释/* WEBPACK VAR INFECTION */,没错
+如果你认真看过最前面推荐的文章——[Webpack 热更新实现原理分析](https://zhuanlan.zhihu.com/p/30623057)，并且浏览过HRM源码，就会有深刻印象。这是HRM的client模块代码，核心功能是通过EventSource，将与HRM server建立连接，进行模块更新通信。看一下代码注释/* WEBPACK VAR INFECTION */,没错，就是这段注入代码，成真正的入口函数。
+
+根据我的理解，热加载客户端的监听事件确实应该在项目入口加载之前执行，但是没有必要把入口文件直接替换了吧。另外，client.js中export出来的接口应该只是用于测试的，具体可见[client-test.js](https://github.com/glenjamin/webpack-hot-middleware/blob/master/test/client-test.js)
+
+截下来的探索感觉超出了自己能力范围，应该和热加载设计理念有关。所以，默默提了个[issue](https://github.com/glenjamin/webpack-hot-middleware/issues/280),不知道会不会有人解答，期待。
 
 #### 问题的最终方法
 经过以上排查，我们知道为啥 script 标签引入失效，"热加载"不用背锅。不用因噎废食抛弃热加载了。反观我们的代码，直接script标签引入然后在script内联进行代码编写实在有点暴力。建议：本地开发内联js也可以另起一个入口文件，写个自执行函数或者手动直接挂在到window就啥事都没有了，毕竟问题只是因为暴露的接口被热加载模块给覆盖了，幸好包还是引得到的。
