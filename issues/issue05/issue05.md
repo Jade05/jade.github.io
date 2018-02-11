@@ -47,7 +47,10 @@ promise1.then((data) => {
 以上是最常见的表现。具体还分return value的value具体是什么
 
 Promise所有知识点都讲完了。Promise规范和node的事件机制、Promise规范和浏览器机制，是怎么样子的。
-> Here “platform code” means engine, environment, and promise implementation code. In practice, this requirement ensures that onFulfilled and onRejected execute asynchronously, after the event loop turn in which then is called, and with a fresh stack. This can be implemented with either a “macro-task” mechanism such as setTimeout or setImmediate, or with a “micro-task” mechanism such as MutationObserver or process.nextTick. Since the promise implementation is considered platform code, it may itself contain a task-scheduling queue or “trampoline” in which the handlers are called.
+onFulfilled or onRejected must not be called until the execution context stack contains only platform code. [3.1].
+
+platform code:
+Here “platform code” means engine, environment, and promise implementation code. In practice, this requirement ensures that onFulfilled and onRejected execute asynchronously, after the event loop turn in which then is called, and with a fresh stack. This can be implemented with either a “macro-task” mechanism such as setTimeout or setImmediate, or with a “micro-task” mechanism such as MutationObserver or process.nextTick. Since the promise implementation is considered platform code, it may itself contain a task-scheduling queue or “trampoline” in which the handlers are called.
 
 ### 浏览器端
 
@@ -112,12 +115,30 @@ https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects
 
 结论：
 then async fun 的执行顺序：
+表象：
+promise then 异步函数如果已经resolved也是一个是在每个phase开始之前就要执行，但是在process.nextTick之后。
 
-promise then 异步函数也是一个是在每个phase开始之前就要执行，但是在process.nextTick之后。
+还是要回到promise A+规范中找答案：https://promisesaplus.com/
+为什么会这样呢：
+onFulfilled or onRejected must not be called until the execution context stack contains only platform code. [3.1].
+
+platform code:
+Here “platform code” means engine, environment, and promise implementation code. In practice, this requirement ensures that onFulfilled and onRejected execute asynchronously, after the event loop turn in which then is called, and with a fresh stack. This can be implemented with either a “macro-task” mechanism such as setTimeout or setImmediate, or with a “micro-task” mechanism such as MutationObserver or process.nextTick. Since the promise implementation is considered platform code, it may itself contain a task-scheduling queue or “trampoline” in which the handlers are called.
+
+node各个phase已经执行什么我们基本清楚了，比如timer settimeout,checker setImmediate, 每个phase结束下个phase开始之前都会执行nextTick,
+node 是怎么处理promise async回调的呢？
 
 
-es6 promise实现：
-参考： https://zhuanlan.zhihu.com/p/25178630
+https://github.com/nodejs/node/search?utf8=%E2%9C%93&q=MicrotaskQueue&type=
+
+// Processing of the MicrotaskQueue is manually handled by node. They are not
+// processed until after the nextTickQueue has been processed.
+
+为了测试addons, c++, addons文档:https://github.com/nodejs/node/blob/d3569b623ccd593c9ef62fcaf0aba2711dc7fbfa/doc/api/addons.md
+
+es6 promise: https://github.com/then/promise
+参考： https://github.com/creeperyang/blog/issues/21
+https://jsblog.insiderattack.net/promises-next-ticks-and-immediates-nodejs-event-loop-part-3-9226cbe7a6aa
 
 #### 同为node端，异步知识还有哪些以及比较
 async  await generator
