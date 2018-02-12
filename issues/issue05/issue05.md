@@ -21,13 +21,17 @@ ES promise的源码： https://github.com/then/promise
 
 #### promise A+ 规范是怎样子的：https://promisesaplus.com/
 
+
+vs promise/A有什么不同https://promisesaplus.com/differences-from-promises-a
+
+
 简单来说：
 1. 三个状态： pending, fulfilled, or rejected.
 2. then method, promise.then(onFulfilled, onRejected)
 ....
 
 
-比较有意思的有以下两点：
+比较有意思的有以下三点：
 1. 2.2.4规范提到的这么一句话：onFulfilled or onRejected must not be called until the execution context stack contains only platform code. [3.1].——这个规范很重要，等下再说
 
 Here “platform code” means engine, environment, and promise implementation code. In practice, this requirement ensures that onFulfilled and onRejected execute asynchronously, after the event loop turn in which then is called, and with a fresh stack. This can be implemented with either a “macro-task” mechanism such as setTimeout or setImmediate, or with a “micro-task” mechanism such as MutationObserver or process.nextTick. Since the promise implementation is considered platform code, it may itself contain a task-scheduling queue or “trampoline” in which the handlers are called.
@@ -167,4 +171,7 @@ verifyExecutionOrder unitTest:
 #### 同为node端，异步知识还有哪些以及比较
 async/await generator
 
-#### promise源码分析： https://github.com/then/promise
+#### promise源码分析： 
+https://www.promisejs.org/implementing/
+https://v8docs.nodesource.com/node-9.3/d3/d8f/classv8_1_1_promise.html
+https://github.com/then/promise
