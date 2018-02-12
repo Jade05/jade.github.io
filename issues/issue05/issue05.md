@@ -28,7 +28,7 @@ ES promise的源码： https://github.com/then/promise
 
 
 比较有意思的有以下两点：
-1. 2.2.4规范提到的这么一句话：onFulfilled or onRejected must not be called until the execution context stack contains only platform code. [3.1].
+1. 2.2.4规范提到的这么一句话：onFulfilled or onRejected must not be called until the execution context stack contains only platform code. [3.1].——这个规范很重要，等下再说
 
 Here “platform code” means engine, environment, and promise implementation code. In practice, this requirement ensures that onFulfilled and onRejected execute asynchronously, after the event loop turn in which then is called, and with a fresh stack. This can be implemented with either a “macro-task” mechanism such as setTimeout or setImmediate, or with a “micro-task” mechanism such as MutationObserver or process.nextTick. Since the promise implementation is considered platform code, it may itself contain a task-scheduling queue or “trampoline” in which the handlers are called.
 
@@ -41,6 +41,17 @@ promise2 = promise1.then(onFulfilled, onRejected);
 4. If onRejected is not a function and promise1 is rejected, promise2 must be rejected with the same reason as promise1.
 
 es6 promise catch行为依据
+```javascript
+new Promise(function(resolve, reject) {
+  resolve(1)
+}).then(function() {
+  console.log('resolve')
+}, function() {
+  console.log('reject')
+}).catch(function(e) {
+  console.log('catch error')
+})
+```
 
 3. 2.3 规范：Promise Resolution Procedure
 
@@ -62,7 +73,7 @@ promise1.then((data) => {
 })
 ```
 
-以上是最常见的表现。具体还分return value的value具体是什么
+以上是最常见的表现。具体还分return value的value具体是什么。
 
 Promise所有知识点都讲完了。Promise规范和node的事件机制、Promise规范和浏览器机制，是怎么样子的。
 
@@ -149,9 +160,11 @@ verifyExecutionOrder unitTest:
   }));
 ```
 
-所以结论就是promise then async fun是一个Microtask,每个phase结束后会先遍历nextTick queue,然后会遍历完Microtask queue,Microtask有可能会产生nextTick，所以当Microtasktask queue执行完毕后都会检查nextTick queue。然后才会进入下一个phase。
+所以在node端promise then async fun是一个Microtask,每个phase结束后会先遍历nextTick queue,然后会遍历完Microtask queue,Microtask有可能会产生nextTick，所以当Microtasktask queue执行完毕后都会检查nextTick queue。然后才会进入下一个phase。
 
 以下这篇文章里头的执行图比之前的流程图可能更清晰： https://jsblog.insiderattack.net/promises-next-ticks-and-immediates-nodejs-event-loop-part-3-9226cbe7a6aa
 
 #### 同为node端，异步知识还有哪些以及比较
 async/await generator
+
+#### promise源码分析： https://github.com/then/promise
