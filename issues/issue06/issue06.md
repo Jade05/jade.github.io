@@ -1,20 +1,20 @@
 ## 目录
-1. AMP是什么
-2. 我们为什么选择AMP
-3. AMP项目开发
-4. 我们踩过的"坑"儿
-5. 如何优化AMP SEO页面
-6. eamp框架，让开发AMP项目更简单
+1. [AMP是什么](#title-1)
+2. [我们为什么选择AMP](#title-2)
+3. [AMP项目开发](#title-3)
+4. [我们踩过的"坑"儿](#title-4)
+5. [如何优化AMP SEO页面](#title-5)
+6. [eamp框架，让开发AMP项目更简单](#title-6)
 
 
-## AMP是什么
+## <span id = "title-1">AMP是什么</span>
 
 Google 前沿的 AMP 「 Accelerated Mobile Pages 」技术，能使用户从搜索引擎当中进入我们页面的体验得到一个极大的提升。确切地说，AMP并不是一门新的技术，它只是一种能让页面打开得更快的解决方案。你只要会HTML,CSS，略懂JS，就可以开发你自己的AMP页面。
 
 有关AMP更多内容可以参看[官网](https://www.ampproject.org/zh_cn/learn/overview/)。
 
 
-## 我们为什么选择AMP
+## <span id = "title-2">我们为什么选择AMP</span>
 
 看看AMP能给我们带来什么：
 1. AMP能够带来SEO排名优化。
@@ -24,7 +24,7 @@ Google 前沿的 AMP 「 Accelerated Mobile Pages 」技术，能使用户从搜
 所以，作为携程的海外业务部门，我们率先试水了AMP项目。
 
 
-## AMP项目开发
+## <span id = "title-3">AMP项目开发</span>
 
 AMP项目开发和普通站点的开发模式几乎一样，但是为了最大限度提升性能，AMP项目页面有不少要求。比如：
 1. 为了避免 JavaScript 延缓页面渲染，AMP页面不能包含自己编写的JavaScript。
@@ -41,7 +41,8 @@ AMP项目开发和普通站点的开发模式几乎一样，但是为了最大�
 
 *******添加图片，待补充*****
 
-## 我们踩过的坑儿
+
+## <span id = "title-4">我们踩过的"坑"儿</span>
 
 AMP有不少限制要求，开发中难免碰到不好解决的问题。以下对我们碰到过的问题及解决方法进行分享。
 
@@ -58,7 +59,7 @@ AMP有不少限制要求，开发中难免碰到不好解决的问题。以下�
 ```
 ![image](https://user-images.githubusercontent.com/5029635/37567104-fa18ddf8-2afc-11e8-866a-427f7f9c08c4.png)
 
-除非AMP放开复杂度限制，否则我们能做的只能是尽量提前运算，当需要某个计算结果的时候，可以直接使用。比如例子中，location.concatResult就是在location组件内部先进行concat，再将concat的结果拼接到href。此外，可以尽量简化交互，减少参数。
+对于此问题，除非AMP放开复杂度限制，否则我们能做的只能是尽量提前运算，当需要某个计算结果的时候，可以直接使用。比如例子中，location.concatResult就是在location组件内部先进行concat，再将concat的结果拼接到href。此外，可以尽量简化交互，减少参数。
 
 此问题在AMP开发中势必会碰到，详细讨论可以看[ISSUES-11434](https://github.com/ampproject/amphtml/issues/11434)
 
@@ -73,7 +74,7 @@ AMP有不少限制要求，开发中难免碰到不好解决的问题。以下�
 6. amp下统计页面埋点必须基于[amp自带的统计控件](https://www.ampproject.org/docs/ads_analytics/analytics-vendors)，目前amp封装了市面上大部分的第三方统计系统。但是由于公司内部的统计工具没有amp对应的控件，所以无法接入。
 
 
-## 如何优化AMP SEO页面
+## <span id = "title-5">如何优化AMP SEO页面</span>
 
 ### 最大化提速
 
@@ -81,14 +82,12 @@ AMP有不少限制要求，开发中难免碰到不好解决的问题。以下�
 
 ### amp-install-serviceworker，让你打开的不仅仅是一个amp页面
 
-AMP SEO页面作为搜索排名优化页面的同时，还兼具引流功能。虽然AMP页面能让用户从搜索结果中最快速地到达我们的landing页面，但是只有用户最终从landing页又回到原始页面走完必要的业务流程，才是有效的转化。例如，在我们的业务中，用户可以通过搜索引擎快速到达酒店列表、酒店详情的AMP页面，但只有从酒店详情AMP页面跳转到支付页（非AMP），并完成支付，才算转换成功。如果原始页面体验不好，用户依旧可能中途流失。这似乎不是AMP的"错"，但AMP确实还能再做些什么。
+AMP SEO页面作为搜索排名优化页面的同时，还兼具引流功能。虽然AMP页面能让用户从搜索结果中最快速地到达我们的landing页面，但是只有用户最终从landing页又回到原始页面走完必要的业务流程，才是有效的转化。例如，在我们的业务中，用户可以通过搜索引擎快速到达酒店列表、酒店详情的AMP页面，但只有从酒店详情AMP页面跳转到支付页（非AMP），并完成支付，才算转化成功。如果原始页面体验不好，用户依旧可能中途流失。这似乎不是AMP的"错"，但AMP确实还能再做些什么。
 
 通过amp-install-serviceworker安装原始站点的sw.js，提前加载好原始页面的资源，当用户从AMP页面跳出，进入原始主站的时候，让主站体验更好，从而提高转化。
 
-******添加图片，待补充******
 
-
-## [eamp](https://github.com/Jade05/eamp)框架，让开发AMP项目更简单
+## <span id = "title-6">[eamp](https://github.com/Jade05/eamp)框架，让开发AMP项目更简单</span>
 
 eamp是从我们AMP SEO项目中提取出来的简化版框架，能够让我们快速开启AMP Node项目，使用者无需从0开始搭建，更能专注amp页面开发。
 
