@@ -4,8 +4,7 @@
 3. AMP项目开发
 4. 我们踩过的"坑"儿
 5. 如何优化AMP SEO页面
-6. 项目收益
-7. eamp框架，让开发AMP项目更简单
+6. eamp框架，让开发AMP项目更简单
 
 
 ## AMP是什么
@@ -63,16 +62,15 @@ AMP有不少限制要求，开发中难免碰到不好解决的问题。以下�
 
 此问题在AMP开发中势必会碰到，详细讨论可以看[ISSUES-11434](https://github.com/ampproject/amphtml/issues/11434)
 
-2. AMP限制编写JavaScript，也就不允许我们读写cookie、localstorage，但是记录用户行为是很重要的事情，比如一些表单信息，用户的选择，等用户下次打开我们的页面时，能够显示用户上一次的状态。
+2. AMP限制编写JavaScript，也就不允许我们读写cookie、localstorage，但是记录用户行为是很重要的事情，比如一些表单信息，用户的选择，等用户下次打开我们的页面时，能够显示用户上一次的状态。我们的解决方法是通过http set-cookie方式解决前端无法记录cookie的问题。
 
-我们的解决方法是通过http set-cookie方式解决前端无法记录cookie的问题。
-
-3. AMP form只能提交ajax post请求，无法做到以post表单形式跳转。
-通过增加非amp的中间路由，做二次跳转后再提交数据。
+3. AMP form只能提交ajax post请求，无法做到以post表单形式跳转。所以在开发过程中尽量避免出现post表单形式的请求，一般改用ajax post加页面跳转的形式来提交；在迫不得已的情况下，可以考虑通过增加非amp的中间路由，在中间页中构造表单并自动提交数据。
 
 4. AMP CROS：用户最终访问的是AMP Cache，在AMP launch新版本之前，命中AMP Cache，页面地址并非是真实地址而是google amp cache地址，如果页面上有额外的异步请求，就会有跨域限制，所以我们要在服务端开启跨域，返回头设置AMP-Access-Control-Allow-Source-Origin。
 
-*****yzh ck补充。
+5. amp-iframe有sandbox属性，用来指定iframe内部的站点权限，默认值为空。如果希望iframe内部可以执行js脚本，则需要设置成"allow-scripts"；如果需要添加内部发送同域请求的权限，则需要设置成"allow-scripts allow-same-origin"；但如果amp-iframe的src是同域站点，那么sandbox属性必须不能包含allow-same-origin，这样做杜绝了脱离amp控件发送请求的可能性。
+
+6. amp下统计页面埋点必须基于[amp自带的统计控件](https://www.ampproject.org/docs/ads_analytics/analytics-vendors)，目前amp封装了市面上大部分的第三方统计系统。但是由于公司内部的统计工具没有amp对应的控件，所以无法接入。
 
 
 ## 如何优化AMP SEO页面
