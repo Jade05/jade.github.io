@@ -12,14 +12,14 @@
 
 Google 前沿的 AMP 「 Accelerated Mobile Pages 」技术，能使用户从搜索引擎当中进入我们页面的体验得到一个极大的提升。确切地说，AMP并不是一门新的技术，它只是一种能让页面打开得更快的解决方案。你只要会HTML,CSS，略懂JS，就可以开发你自己的AMP页面。
 
-有关AMP更多内容可以参看（官网）[https://www.ampproject.org/zh_cn/learn/overview/]。
+有关AMP更多内容可以参看[官网](https://www.ampproject.org/zh_cn/learn/overview/)。
 
 
 ## 我们为什么选择AMP
 
 看看AMP能给我们带来什么：
 1. AMP能够带来SEO排名优化。
-2. AMP Cache能够让我们充分借助Google CDN cache的优势。虽然我们内部已经做了很多优化，包括DNS预热（有关DNS预热可参见我们组同事写的一篇文章——（网站性能优化——DNS预热与合并HTTP请求）[https://zhuanlan.zhihu.com/p/32168340]），但如果能有Google全球CDN支持就更是件好事。
+2. AMP Cache能够让我们充分借助Google CDN cache的优势。虽然我们内部已经做了很多优化，包括DNS预热（有关DNS预热可参见我们组同事写的一篇文章——[网站性能优化——DNS预热与合并HTTP请求](https://zhuanlan.zhihu.com/p/32168340)），但如果能有Google全球CDN支持就更是件好事。
 3. Google搜索结果对AMP页面有预加载处理，能让用户更快地到达我们的着陆页。
 
 所以，作为携程的海外业务部门，我们率先试水了AMP项目。
@@ -33,13 +33,14 @@ AMP项目开发和普通站点的开发模式几乎一样，但是为了最大�
 3. AMP 页面允许第三方 JavaScript，但仅限在沙盒环境下的 iframe 中。
 4. 用户几乎可以使用所有原生的HTML标签，但是对img等会产生外部资源依赖的标签，只能使用amp-img自定义标签。
 
-基于以上几点，页面上所有交互逻辑都必须通过css实现，无法依赖JS。对于实现复杂的交互，AMP会显得力不从心。但是这其实是和AMP原则相一致的，JS丰富了页面，但JS也是页面优化噩梦的开始。(What Google AMP means for the JavaScript community)[https://molily.de/amp/]这篇文章将阐述JavaScript性能影响。
+基于以上几点，页面上所有交互逻辑都必须通过css实现，无法依赖JS。对于实现复杂的交互，AMP会显得力不从心。但是这其实是和AMP原则相一致的，JS丰富了页面，但JS也是页面优化噩梦的开始。[What Google AMP means for the JavaScript community](https://molily.de/amp/)这篇文章将阐述JavaScript性能影响。
 
 当开发完成后，必须保证页面是符合AMP规范的，只有符合AMP规范的页面才会被搜索引擎收录。在chrome中安装AMP Validate插件，当你的页面是完全符合AMP规范的时候，chrome valid AMP按钮会呈现绿色。如下图：
 ![image](https://user-images.githubusercontent.com/5029635/37567101-f17cd30c-2afc-11e8-9080-88711f033db8.png)
 
 在页面link中配置amphtml和canonical,将原始页面和AMP页面进行绑定。
 
+*******添加图片，待补充*****
 
 ## 我们踩过的坑儿
 
@@ -71,7 +72,7 @@ AMP有不少限制要求，开发中难免碰到不好解决的问题。以下�
 
 4. AMP CROS：用户最终访问的是AMP Cache，在AMP launch新版本之前，命中AMP Cache，页面地址并非是真实地址而是google amp cache地址，如果页面上有额外的异步请求，就会有跨域限制，所以我们要在服务端开启跨域，返回头设置AMP-Access-Control-Allow-Source-Origin。
 
-yzh ck补充。
+*****yzh ck补充。
 
 
 ## 如何优化AMP SEO页面
@@ -86,16 +87,7 @@ AMP SEO页面作为搜索排名优化页面的同时，还兼具引流功能。�
 
 通过amp-install-serviceworker安装原始站点的sw.js，提前加载好原始页面的资源，当用户从AMP页面跳出，进入原始主站的时候，让主站体验更好，从而提高转化。
 
-
-## 项目收益
-
-### seo页面和原始页面在速度上的对比
-
-AMP页面收录后，用户访问的实际上是AMP cache，也就是当我们的AMP页面出现在Google搜索结果中的时候，Google会预加载AMP页面，当用户点击搜索结果的链接到达我们的页面时，实际时间耗费几乎为0s。对比结果显而易知。
-
-### 给原始站点带来的PV UV
-
-此数据有待补充，如果允许，后续补上。
+******添加图片，待补充******
 
 
 ## [eamp](https://github.com/Jade05/eamp)框架，让开发AMP项目更简单
