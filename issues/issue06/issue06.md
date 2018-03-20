@@ -18,7 +18,7 @@ Google 前沿的 AMP 「 Accelerated Mobile Pages 」技术，能使用户从搜
 ## <span id = "title-2">我们为什么选择AMP</span>
 
 看看AMP能给我们带来什么：
-1. AMP能够带来SEO排名优化。因为Google爬虫会觉得你的页面是AMP页面，打开得足够快。
+1. AMP能够带来SEO排名优化。
 2. AMP Cache能够让我们充分借助Google CDN Cache的优势。虽然我们内部已经做了很多优化，包括DNS预热（有关DNS预热可参见我们组同事写的一篇文章——[网站性能优化——DNS预热与合并HTTP请求](https://zhuanlan.zhihu.com/p/32168340)），但如果能有Google全球CDN支持就更是件好事。
 3. Google搜索结果对AMP页面有预加载处理，能让用户更快地到达我们的着陆页。
 
